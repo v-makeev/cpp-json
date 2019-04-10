@@ -265,7 +265,7 @@ namespace JsonParser {
         }
 
         auto operator[](const std::string &s) const {
-            if (tree->constains(s)) {
+            if (tree->contains(s)) {
                 auto res = (tree->get_data(s));
                 if (res->type == JsonStructs::ETE_TREE) {
                     return Dictionary((JsonStructs::json_tree *) res);
@@ -275,7 +275,7 @@ namespace JsonParser {
         }
 
         auto operator()(const std::string &s) const {
-            if (tree->constains(s)) {
+            if (tree->contains(s)) {
                 auto res = (tree->get_data(s));
                 if (res->type == JsonStructs::ETE_ARRAY) {
                     return *((JsonStructs::json_array *) res);
@@ -311,14 +311,14 @@ namespace JsonParser {
         }
 
         JsonStructs::base_type *get_resource(const std::string &s) const {
-            if (!tree->constains(s)) {
+            if (!tree->contains(s)) {
                 return nullptr;
             }
             return tree->get_data(s);
         }
 
         std::string get_string(const std::string &s) const {
-            if (!tree->constains(s)) {
+            if (!tree->contains(s)) {
                 return "";
             }
             auto it = tree->get_data(s);
@@ -329,7 +329,7 @@ namespace JsonParser {
         }
 
         double get_double(const std::string &s) const {
-            if (!tree->constains(s)) {
+            if (!tree->contains(s)) {
                 return 0;
             }
             auto it = tree->get_data(s);
@@ -340,7 +340,7 @@ namespace JsonParser {
         }
 
         long long get_int(const std::string &s) const {
-            if (!tree->constains(s)) {
+            if (!tree->contains(s)) {
                 return 0;
             }
             auto it = tree->get_data(s);
