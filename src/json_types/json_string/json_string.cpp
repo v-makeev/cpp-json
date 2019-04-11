@@ -1,4 +1,4 @@
-#include "../structs.h"
+#include "json_string.h"
 
 namespace JsonStructs {
     json_string operator+(const json_string &j1, const json_string &j2) {

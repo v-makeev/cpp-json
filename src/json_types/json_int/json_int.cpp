@@ -1,4 +1,4 @@
-#include "../structs.h"
+#include "json_int.h"
 
 namespace JsonStructs {
     long long json_int::get_value() const {

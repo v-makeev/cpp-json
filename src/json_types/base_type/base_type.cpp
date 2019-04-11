@@ -1,4 +1,4 @@
-#include "../structs.h"
+#include "base_type.h"
 
 namespace JsonStructs {
     json_array *base_to_array(const base_type *bt) {
@@ -39,46 +39,6 @@ namespace JsonStructs {
             return new json_tree(jt);
         }
         return nullptr;
-    }
-
-    std::string base_type::to_string() {
-        if (type == ETE_NONE) {
-            return "None";
-        }
-        if (type == ETE_INT) {
-            return std::to_string((static_cast<json_int *>(this))->get_value());
-        }
-        if (type == ETE_DOUBLE) {
-            return std::to_string((static_cast<json_double *>(this))->get_value());
-        }
-        if (type == ETE_STRING) {
-            return in_quotes((static_cast<json_string *>(this))->get_value());
-        }
-        if (type == ETE_ARRAY) {
-            auto vec = (static_cast<json_array *>(this))->get_value();
-            std::string ans = "[";
-            for (size_t i = 0; i < vec.size(); ++i) {
-                ans += vec[i]->to_string();
-                if ((i + 1) != vec.size()) {
-                    ans.push_back(',');
-                }
-            }
-            return ans + "]";
-        }
-        if (type == ETE_TREE) {
-            std::string ans = "{";
-            auto mp = (static_cast<json_tree *>(this))->get_value();
-            size_t ind = 1;
-            for (auto it = mp.begin(); it != mp.end(); ++it, ++ind) {
-                std::string name = in_quotes(it->first);
-                ans += (name + ":") + it->second->to_string();
-                if (ind != mp.size()) {
-                    ans.push_back(',');
-                }
-            }
-            return ans + "}";
-        }
-        return "";
     }
 
     base_type *base_type::get_data(const int &i) const {

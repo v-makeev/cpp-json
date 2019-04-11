@@ -1,4 +1,4 @@
-#include "../structs.h"
+#include "json_tree.h"
 
 namespace JsonStructs {
     auto json_tree::get_value() const {
