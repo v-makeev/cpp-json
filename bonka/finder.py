@@ -1,8 +1,7 @@
+from os.path import isdir
 import os
 extensions = ['h', 'py', 'cpp', 'md']
 
-def isdir(filename):
-    return os.path.isdir(filename)
 def get_files(dir):
     files = os.listdir(dir)
     return [file for file in files if isdir('{}/{}'.format(dir, file))], [file for file in files if file.split('.')[-1] in extensions]

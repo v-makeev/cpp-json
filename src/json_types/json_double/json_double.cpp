@@ -1,4 +1,4 @@
-#include "../structs.h"
+#include "json_double.h"
 
 namespace JsonStructs {
     double json_double::get_value() const {

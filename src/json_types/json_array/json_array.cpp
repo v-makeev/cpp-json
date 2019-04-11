@@ -1,7 +1,5 @@
-#pragma once
-
-#include "../structs.h"
-#include "base_type.cpp"
+#include "../../structs.h"
+#include "json_array.h"
 
 namespace JsonStructs {
     void json_array::push_back(const base_type *bt) {
