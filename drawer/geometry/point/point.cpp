@@ -37,4 +37,6 @@ namespace Geometry {
     }
     double Point::get_x() const { return x; }
     double Point::get_y() const { return y; }
+    double& Point::get_x() { return x; }
+    double& Point::get_y() { return y; }
 };

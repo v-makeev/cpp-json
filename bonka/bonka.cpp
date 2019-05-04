@@ -25,7 +25,7 @@ namespace PathMaker {
 
 int main(int argc, char **argv) {
     auto current_directory = PathMaker::get_current_directory();
-    string bonka = string(argv[0]);
+        string bonka = string(argv[0]);
     size_t len = bonka.size();
     while (len > 0 && bonka[len - 1] != '/') --len;
     bonka.resize(len);
@@ -40,4 +40,4 @@ int main(int argc, char **argv) {
         return 1;
     }
     return 0;
-}
+} 

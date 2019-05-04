@@ -1,17 +1,19 @@
 #include "drawer.h"
 
-#include <GL/glut.h>
-
 namespace Drawer {
     using std::make_shared;    
     vector<GeometryObject *> ObjectsContainer::objects{};
     void draw_object(GeometryObject* p) {
         if (p->type == TO_POINT) {
+            glColor3d(1, 0, 0);
+            glPointSize(3);
             glBegin(GL_POINTS);
             auto point = (Point*)p;
             glVertex2d(point->get_x(), point->get_y());
             glEnd();
         } else if (p->type == TO_SEGMENT) {
+            glColor3d(1, 1, 1);
+            glPointSize(1);
             glBegin(GL_LINES);
             auto points = (Segment*)p;
             glVertex2d(points->get_begin().get_x(), points->get_begin().get_y());
@@ -42,8 +44,7 @@ namespace Drawer {
         , max_width(w.max_width)
         {
         }
-    void Window::init(int &argc, char** argv) {
-        glPointSize(point_size);
+    void Window::init(int &argc, char** argv) const {
         glutInit(&argc, argv);
         glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
         glutInitWindowSize(width, height);
@@ -58,14 +59,21 @@ namespace Drawer {
         glutTimerFunc(50, timer, 0);
         glutMainLoop();
     }
-    void Window::draw_point(const Point& p) {
+    void Window::draw_point(const Point& p) const {
         ObjectsContainer::push_back(new Point(p));
     }
-    void Window::draw_segment(const Point& p1, const Point& p2) {
+    void Window::draw_segment(const Point& p1, const Point& p2) const {
         ObjectsContainer::push_back(new Segment(p1, p2));
+    }
+    void Window::clear() const {
+        glClear(GL_COLOR_BUFFER_BIT);
+        ObjectsContainer::objects.clear();
     }
     void ObjectsContainer::push_back(GeometryObject* go) {
         objects.push_back(go);
+    }
+    void Window::set_size_point(int size) {
+        point_size = size;
     }
     void display() {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -74,9 +82,6 @@ namespace Drawer {
             draw_object(*it);
         }
         glutSwapBuffers();
-    }
-    void Window::set_size_point(int size) {
-        point_size = size;
     }
     void timer(int = 0) {
         display();

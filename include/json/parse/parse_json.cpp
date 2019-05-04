@@ -75,6 +75,7 @@ namespace JsonBase {
     }
     bool parse_array(const string& s, shared_ptr<Array>& p) {
         if (s.size() < MIN_LENGTH_ARRAY) { return false; }
+        if (s.size() == MIN_LENGTH_ARRAY) { return true; }
         if (s[0] != '[' || s[s.size() - 1] != ']') { return false; }
         vector<size_t> comma{0};
         enum { IN_QUOTE, OUT_QUOTE } state = OUT_QUOTE;

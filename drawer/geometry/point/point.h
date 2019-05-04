@@ -24,5 +24,7 @@ namespace Geometry {
         Point operator-() const;
         double get_x() const;
         double get_y() const;
+        double& get_x();
+        double& get_y();
     };
 };

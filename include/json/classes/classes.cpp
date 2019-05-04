@@ -15,6 +15,7 @@ namespace JsonBase {
     Int::Int() : value{} { }
     Int::Int(int value) : value(value) { }
     Int::Int(const Int& i) : value(i.value) { }
+    int Int::get_value() const { return value; }
     string Int::as_string() const {
         std::ostringstream ss;
         ss << value;
@@ -97,6 +98,7 @@ namespace JsonBase {
     void Array::push_back(const Tree& t) {
         value.push_back(make_unique<Tree>(t));
     }
+    size_t Array::size() const { return value.size(); }
     Array::~Array() { }
     string Array::as_string() const {
         if (value.empty()) { return "[]"; }
@@ -164,6 +166,12 @@ namespace JsonBase {
     }
     void Tree::insert(const string& name, const Tree& t) {
         value.insert({ name, make_shared<Tree>(t) });
+    }
+    Array Tree::operator ()(const string& s) {
+        return *(Array*)value[s].get();
+    }
+    Tree Tree::operator [](const string& s) {
+        return *(Tree*)value[s].get();
     }
     string Tree::as_string() const {
         if (value.empty())
