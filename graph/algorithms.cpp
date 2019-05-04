@@ -53,11 +53,7 @@ namespace Functions {
     public:
         TemperatureGen() {}
         static double next_temperature(double temp) {
-            static int cnt = 2500;
-            --cnt;
-            if (temp < 1.0)
-                temp = 100.0;
-            return cnt ? temp * 0.9999 : 0.0;
+            return temp * 0.9999;
         }
     };
     class StateGen {
@@ -69,21 +65,15 @@ namespace Functions {
         StateGen(const Graph& gr, double w, double h) : gr(gr), w(w), h(h) { } 
         value_type first_state() const {
             value_type res;
-            size_t cnt = gr.count_vertex();
+            size_t cnt = gr.count_vertex() * 2;
             double angle = 0, da = 2 * M_PI / cnt;
-            double r = w / 3.0;
+            double r = w / 2.3;
             for (int i = 0; i < cnt; ++i) {
                 res.push_back(Point(w / 2 + r * cos(angle), h / 2 + r * sin(angle)));
                 angle += da;
             }
             r /= 2;
-            angle = M_PI / 2.0;
-            for (int i = 0; i < cnt; ++i) {
-                res.push_back(Point(w / 2 + r * cos(angle), h / 2 + r * sin(angle)));
-                angle += da;
-            }
-            r /= 1.5;
-            angle = M_PI * 0.75;
+            angle = Random::random(0, M_PI / 2.0);
             for (int i = 0; i < cnt; ++i) {
                 res.push_back(Point(w / 2 + r * cos(angle), h / 2 + r * sin(angle)));
                 angle += da;
@@ -91,35 +81,44 @@ namespace Functions {
             return res;
         }
         double estimate(const value_type& st) const {
+            auto ngr(gr);
             for (size_t i = 0; i < gr.count_vertex(); ++i) {
-                gr[i].get_x() = st[i].get_x();
-                gr[i].get_y() = st[i].get_y();
+                ngr[i].get_x() = st[i].get_x();
+                ngr[i].get_y() = st[i].get_y();
             }
             double res = 0;
-            for (auto ed1 = gr.begin(); ed1 != gr.end(); ++ed1) {
-                for (auto ed2 = ed1 + 1; ed2 != gr.end(); ++ed2) {
+            for (auto ed1 = ngr.begin(); ed1 != ngr.end(); ++ed1) {
+                for (auto ed2 = ed1 + 1; ed2 != ngr.end(); ++ed2) {
                     auto s1 = Segment(vertex_to_point(*ed1->get_from()), vertex_to_point(*ed1->get_to()));
                     auto s2 = Segment(vertex_to_point(*ed2->get_from()), vertex_to_point(*ed2->get_to()));
-                    if (intersect_segments(s1, s2))
+                    if (ed1->get_from() == ed2->get_to()) continue;
+                    if (ed1->get_from() == ed2->get_from()) continue;
+                    if (ed1->get_to() == ed2->get_from()) continue;
+                    if (ed1->get_to() == ed2->get_to()) continue;
+                    if (intersect_segments(s1, s2)) {
                         res += 1.0;
+                    }
                 }
             }
-            return -res * 15;
+            return res;
         }
         void get_next(const value_type& cur, value_type& next) const {
             int l = Random::random_int(cur.size());
             int r = Random::random_int(cur.size());
             while (l == r) { r = Random::random_int(cur.size()); }
             next = cur;
-            std::swap(next[l], next[r]);
+            if (l > r) { std::swap(l, r); }
+            std::reverse(next.begin() + l, next.begin() + r);
         }
     };
     void VisualPresent::optimal(double mx, double my) {
-        AnnealingProcess::Annealing an(100, 0.1);
+        AnnealingProcess::Annealing an(10000, 0.5);
         StateGen gen_state(gr, mx, my);
-        vector<Point> v = an.solve<Random, TemperatureGen>(gen_state);
+        vector<Point> v = an.solve<Random>(gen_state, TemperatureGen());
+        std::cout << gen_state.estimate(v) << "\n";
         for (size_t i = 0; i < gr.count_vertex(); ++i) {
-            gr[i].get_x() = v[i].get_x(), gr[i].get_y() = v[i].get_y();
+            gr[i].get_x() = v[i].get_x();
+            gr[i].get_y() = v[i].get_y();
         }
     }
 };

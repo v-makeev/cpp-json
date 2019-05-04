@@ -1,19 +1,30 @@
 #include "geometry.h"
 
+#include <algorithm>
+#include <cmath>
+
 namespace Geometry {
+    double min(double a, double b) {
+        return a < b ? a : b;
+    }
+    double max(double a, double b) {
+        return a > b ? a : b;
+    }
+    inline double area (const Point& a, const Point& b, const Point& c) {
+        return (b - a) ^ (c - a);
+    }
+    inline bool intersect_1 (double a, double b, double c, double d) {
+        if (a > b)  std::swap (a, b);
+        if (c > d)  std::swap (c, d);
+        return max(a,c) <= min(b,d);
+    }
+    bool intersect_bp(const Point& a, const Point& b, const Point& c, const Point& d) {
+        return intersect_1 (a.get_x(), b.get_x(), c.get_x(), d.get_x())
+            && intersect_1 (a.get_y(), b.get_y(), c.get_y(), d.get_y())
+            && area(a,b,c) * area(a,b,d) <= 0
+            && area(c,d,a) * area(c,d,b) <= 0;
+    }
     bool intersect_segments(const Segment& s1, const Segment& s2) {
-        auto A1 = s1.get_begin();
-        auto B1 = s1.get_end();
-        auto A2 = s2.get_begin();
-        auto B2 = s2.get_end();
-        if (std::fmin(A1.get_x(), B1.get_x()) > std::fmax(A2.get_x(), B2.get_x()))
-            return false;
-        if (std::fmin(A1.get_y(), B1.get_y()) > std::fmax(A2.get_y(), B2.get_y()))
-            return false;
-        if (std::fmax(A1.get_y(), B1.get_y()) < std::fmin(A2.get_y(), B2.get_y()))
-            return false;
-        if (std::fmax(A1.get_y(), B1.get_y()) < std::fmin(A2.get_y(), B2.get_y()))
-            return false;
-        return true;
+        return intersect_bp(s1.get_begin(), s1.get_end(), s2.get_begin(), s2.get_end());
     }
 };
