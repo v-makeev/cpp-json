@@ -2,6 +2,7 @@
 #include "geometry/geometry.h"
 #include "../include/vector/Vector.h"
 
+#include <GL/glut.h>
 #include <memory>
 
 namespace Drawer {
@@ -24,9 +25,10 @@ namespace Drawer {
         Window(unsigned short width, unsigned short height, double max_width, double max_height);
         Window(unsigned short width, unsigned short height);
         Window(const Window& w);
-        void init(int &argc, char** argv);
-        void draw_point(const Point& p);
-        void draw_segment(const Point& p1, const Point& p2);
+        void init(int &argc, char** argv) const;
+        void draw_point(const Point& p) const;
+        void draw_segment(const Point& p1, const Point& p2) const;
         void set_size_point(int size);
+        void clear() const;
     };
 };

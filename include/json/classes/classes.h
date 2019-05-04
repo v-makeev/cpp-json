@@ -30,6 +30,7 @@ namespace JsonBase {
         Int();
         Int(int value);
         Int(const Int& i);
+        int get_value() const;
         string as_string() const override;
         TypeElement get_type() const override;
         ~Int();
@@ -68,6 +69,8 @@ namespace JsonBase {
         void push_back(const String& s);
         void push_back(const Array& a);
         void push_back(const Tree& a);
+        Element* operator[] (int i) { return value[i].get(); }
+        size_t size() const;
 
         string as_string() const override;
         TypeElement get_type() const override;
@@ -85,6 +88,8 @@ namespace JsonBase {
         void insert(const string& name, const String& s);
         void insert(const string& name, const Array& a);
         void insert(const string& name, const Tree& t);
+        Array operator ()(const string& s);
+        Tree operator [](const string& s);
 
         string as_string() const override;
         TypeElement get_type() const override;
