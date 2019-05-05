@@ -14,6 +14,8 @@ namespace AnnealingProcess {
             typename StateGen::value_type cur = sg.first_state();
             typename StateGen::value_type next;
             double energy = sg.estimate(cur);
+            auto best_state = cur;
+            auto best_energy = energy;
             while (temp > finish) {
                 sg.get_next(cur, next);
                 double nE = sg.estimate(next);
@@ -22,9 +24,14 @@ namespace AnnealingProcess {
                     energy = nE;
                     cur = next;
                 }
+                if (energy < best_energy) {
+                    best_energy = energy;
+                    best_state = cur;
+                }
+                std::cout << "energy : " << energy << std::endl;
                 temp = gen.next_temperature(temp);
             }
-            return cur;
+            return best_state;
         }
     };
 };

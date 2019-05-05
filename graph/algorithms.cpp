@@ -65,18 +65,18 @@ namespace Functions {
         StateGen(const Graph& gr, double w, double h) : gr(gr), w(w), h(h) { } 
         value_type first_state() const {
             value_type res;
-            size_t cnt = gr.count_vertex() * 2;
-            double angle = 0, da = 2 * M_PI / cnt;
+            size_t cnt = gr.count_vertex() * 3;
+            double angle = Random::random(0.0, M_PI), da = 2 * M_PI / cnt;
             double r = w / 2.3;
-            for (int i = 0; i < cnt; ++i) {
-                res.push_back(Point(w / 2 + r * cos(angle), h / 2 + r * sin(angle)));
-                angle += da;
-            }
-            r /= 2;
-            angle = Random::random(0, M_PI / 2.0);
-            for (int i = 0; i < cnt; ++i) {
-                res.push_back(Point(w / 2 + r * cos(angle), h / 2 + r * sin(angle)));
-                angle += da;
+            int cnt_loop = 0;
+            while ((cnt_loop++ << 1) < cnt);
+            for (int j = 0; j < cnt_loop; ++j) {
+                angle = Random::random(0.0, M_PI);
+                r /= 1.2;
+                for (int i = 0; i < cnt; ++i) {
+                    res.push_back(Point(w / 2 + r * cos(angle), h / 2 + r * sin(angle)));
+                    angle += da;
+                }
             }
             return res;
         }
@@ -112,7 +112,7 @@ namespace Functions {
         }
     };
     void VisualPresent::optimal(double mx, double my) {
-        AnnealingProcess::Annealing an(10000, 0.5);
+        AnnealingProcess::Annealing an(1000, 0.5);
         StateGen gen_state(gr, mx, my);
         vector<Point> v = an.solve<Random>(gen_state, TemperatureGen());
         std::cout << gen_state.estimate(v) << "\n";
