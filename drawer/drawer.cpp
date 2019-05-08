@@ -6,7 +6,7 @@ namespace Drawer {
     void draw_object(GeometryObject* p) {
         if (p->type == TO_POINT) {
             glColor3d(1, 0, 0);
-            glPointSize(3);
+            glPointSize(5);
             glBegin(GL_POINTS);
             auto point = (Point*)p;
             glVertex2d(point->get_x(), point->get_y());
