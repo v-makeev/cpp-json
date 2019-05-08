@@ -27,4 +27,10 @@ namespace Geometry {
     bool intersect_segments(const Segment& s1, const Segment& s2) {
         return intersect_bp(s1.get_begin(), s1.get_end(), s2.get_begin(), s2.get_end());
     }
+    Point homotate(const Point& O, const Point& p, double k) {
+        return O + (p - O) * k;
+    }
+    Segment homotate(const Point& O, const Segment& s, double k) {
+        return Segment(O + (s.get_begin() - O) * k, O + (s.get_end() - O) * k);
+    }
 };

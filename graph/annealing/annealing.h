@@ -10,7 +10,7 @@ namespace AnnealingProcess {
         Annealing();
         Annealing(double init_temp, double finish);
         template <class Random, class TemperatureGen, class StateGen>
-        auto solve(StateGen sg, TemperatureGen gen) {
+        auto solve(StateGen& sg, TemperatureGen gen) {
             typename StateGen::value_type cur = sg.first_state();
             typename StateGen::value_type next;
             double energy = sg.estimate(cur);
@@ -23,12 +23,12 @@ namespace AnnealingProcess {
                 if (Random::random() < prob) {
                     energy = nE;
                     cur = next;
+                    sg.set_next_state(cur);
                 }
                 if (energy < best_energy) {
                     best_energy = energy;
                     best_state = cur;
                 }
-                std::cout << "energy : " << energy << std::endl;
                 temp = gen.next_temperature(temp);
             }
             return best_state;

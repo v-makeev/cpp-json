@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
     int size_w = 400, size_h = 400;
     Window window(size_w, size_h);
     int n, m;
-    std::cout << "n, m\n";
     std::cin >> n >> m;
     Graph gr;
     for (int i = 0; i < n; ++i) {
