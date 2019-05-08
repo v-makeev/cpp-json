@@ -204,7 +204,6 @@ namespace Functions {
                     r = mid;
                 }
             }
-            std::cout << l << std::endl;
             for (size_t i = 0; i < v.size(); ++i) {
                 v[i] = homotate(center, v[i], l);
             }
@@ -214,6 +213,7 @@ namespace Functions {
         AnnealingProcess::Annealing an(3000, 0.05);
         StateGen gen_state(gr, mx, my);
         vector<Point> v = an.solve<Random>(gen_state, TemperatureGen());
+        v.resize(gr.count_vertex());
         Scalable::scalable(v, mx, my);
         for (size_t i = 0; i < gr.count_vertex(); ++i) {
             gr[i].get_x() = v[i].get_x();
